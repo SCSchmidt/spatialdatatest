@@ -11,7 +11,7 @@ addons:
       - libudunits2-dev
       - libgdal-dev
       - libgsl0-dev
-      - rgdal-bin
+      - gdal-bin
       - libgeos-dev
       - libpng-dev
       - libproj-dev
