@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 # TestPackage
 
-[![Travis-CI Build Status](https://travis-ci.org/scschmidt/spatialdata_test.svg?branch=master)](https://travis-ci.org/scschmidt/spatialdatatest)
+[![Travis-CI Build Status](https://travis-ci.org/scschmidt/spatialdatatest.svg?branch=master)](https://travis-ci.org/scschmidt/spatialdatatest)
 
 The goal of this is testing
 
