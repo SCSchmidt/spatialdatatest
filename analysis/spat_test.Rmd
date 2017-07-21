@@ -46,30 +46,3 @@ plot(sites_ppp_kde)
 plot(dens_nn)
 ```
 
-
-```{r dem-stuff}
-dem_harran <- readGDAL("./data/dem.tif")
-im_dem <- as.im(as.image.SpatialGridDataFrame(dem_harran))
-plot(dem_harran)
-
-sites_rhohat <- rhohat(object = sites_ppp, covariate = im_dem)
-plot(sites_rhohat, xlim=c(0,1000))
-
-rho_dem <- predict(sites_rhohat)
-plot(rho_dem)
-
-diff_rho <- sites_ppp_kde - rho_dem
-plot(diff_rho)
-
-set.seed(5)
-sites_rpoispp <-rpoispp(ex=sites_ppp)
-plot(sites_rpoispp)
-```
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

@@ -8,7 +8,7 @@ library(rgdal)
 library(leaflet)
 library(raster)
 
-sites <- read.csv("../data/Sites_HarranPlain.csv", sep=",")
+sites <- read.csv("./data/Sites_HarranPlain.csv", sep=",")
 coordinates(sites)<-~X+Y
 proj4string(sites) <-CRS("+init=epsg:4326")
 
@@ -22,7 +22,9 @@ sites_ppp <- ppp(x = sites@coords[,1],
 
 sites_ppp <- unique.ppp(sites_ppp) # removes duplicates
 anyDuplicated(sites_ppp) # check for duplicates
-sites_ppp <-sites_ppp[!duplicated(sites_ppp)] # gib mir das Gegenteil von den duplicated
+#sites_ppp <-sites_ppp[!duplicated(sites_ppp)] # gib mir das Gegenteil von den duplicated geht auch
+
+#first order effects
 
 sites_ppp_nn <- nndist(sites_ppp) # distance in m, because its transformed data
 str(sites_ppp_nn) 
@@ -58,7 +60,8 @@ sites_rhohat <- rhohat(object = sites_ppp, covariate = im_dem) # Abhängigkeit d
 plot(sites_rhohat, xlim=c(0,1000)) # Probleme mit dem dings
 str(sites_rhohat)
 
-sites_rhohat <- rhohat(object = sites_ppp, covariate = im_dem, bw = 200) #
+sites_rhohat <- rhohat(object = sites_ppp, covariate = im_dem, bw = 200) 
+#bandwith auf die dichteberechnung der sites
 plot(sites_rhohat)
 
 rho_dem <- predict(sites_rhohat)
@@ -89,3 +92,63 @@ plot(sites_rpoispp)
 #set.seed(zahl) # wenn ich reduzierbare Ergebnisse haben will, dann am Anfang den seed setzen
 # damit kriegen andere das gleiche Punktmuster.
 
+
+
+#second order effects
+
+sites_g <- Gest(sites_ppp)
+str(sites_g)
+plot(sites_g)
+sites_ge <- envelope(sites_ppp, fun="Gest", nsim=100) # 100 csr simulated
+plot(sites_ge) # doch alles random
+
+
+sites_f <-Fest(sites_ppp)
+str(sites_f)
+plot(sites_f)
+sites_fe <- envelope(sites_ppp, fun="Fest",nsim=50)
+plot(sites_fe)
+
+sites_k <-Kest(sites_ppp)
+plot(sites_k)
+sites_ke <- envelope(sites_ppp, fun="Kest", nsim=500)
+plot(sites_ke)
+
+
+## possible to calculate the F,G and K against an inhomogenous poisson
+# when i know, i have a bias because of elevation or something höhe zB
+# Kinhom, Finhom, Ginhom -> inhomogenous possoin
+# input ein image aus der prediction von rhohat
+
+#Lit: Beverly
+
+sites_ginhom <- Ginhom(sites_ppp, lambda=predict(sites_rhohat))
+plot(sites_ginhom)
+
+dev.new()
+par(mfrow = c(1,2))
+plot(sites_ginhom, xlim=c(0,7000))
+plot(sites_g, xlim=c(0,7000))
+dev.off()
+
+## ppm-Function -> for putting different paramters and stuff. great stuff!
+
+
+
+## backup
+dem_harran <- readGDAL("../data/dem.tif")
+im_dem <- as.im(as.image.SpatialGridDataFrame(dem_harran))
+plot(dem_harran)
+
+sites_rhohat <- rhohat(object = sites_ppp, covariate = im_dem)
+plot(sites_rhohat, xlim=c(0,1000))
+
+rho_dem <- predict(sites_rhohat)
+plot(rho_dem)
+
+diff_rho <- sites_ppp_kde - rho_dem
+plot(diff_rho)
+
+set.seed(5)
+sites_rpoispp <-rpoispp(ex=sites_ppp)
+plot(sites_rpoispp)
