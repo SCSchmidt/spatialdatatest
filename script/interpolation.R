@@ -2,7 +2,6 @@
 library(sp)
 library(rgdal)
 #library(mapview) das bräuchte ein Paket namens sf, das ist ein Prob mit GIS und Linux
-library(leaflet)
 library(raster)
 library(gstat)
 library(automap)
