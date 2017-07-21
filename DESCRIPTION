@@ -10,6 +10,6 @@ Description: This compendium contains code and data for the ... url ... , ...
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: spatstat, raster, gdal, sp, rmarkdown, bookdown, knitr, readr,testthat
+Imports: spatstat, raster, rgdal, sp, rmarkdown, bookdown, knitr, readr,testthat
 Suggests: testthat
 RoxygenNote: 6.0.1
