@@ -14,6 +14,6 @@ RUN . /etc/environment \
  && apt-get update -y \
  && apt-get install -y libudunits2-dev libgdal-dev libgsl0-dev gdal-bin libgeos-dev libpng-dev libproj-dev \
 
- && R -e "options(repos='https://mran.microsoft.com/snapshot/2017-07-20'); devtools::install('/spatialdatatest', dep = TRUE)" \
+ && R -vanilla "options(repos='https://mran.microsoft.com/snapshot/2017-07-20'); devtools::install('/spatialdatatest', dep = TRUE)" \
  
  && R --vanilla "rmarkdown::render('/spatialdatatest/analysis/spat_test.Rmd')"
