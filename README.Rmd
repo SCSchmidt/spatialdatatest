@@ -14,15 +14,15 @@ knitr::opts_chunk$set(
 
 # TestPackage
 
-[![Travis-CI Build Status](https://travis-ci.org/scschmidt/spatialdata_test.svg?branch=master)](https://travis-ci.org/scschmidt/spatialdata_test)
+[![Travis-CI Build Status](https://travis-ci.org/scschmidt/spatialdata_test.svg?branch=master)](https://travis-ci.org/scschmidt/spatialdatatest)
 
 The goal of this is testing
 
 ## Installation
 
-You can install spatialdata_test from github with:
+You can install spatialdatatest from github with:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
-devtools::install_github("scschmidt/spatialdata_test")
+devtools::install_github("scschmidt/spatialdatatest")
 ```
