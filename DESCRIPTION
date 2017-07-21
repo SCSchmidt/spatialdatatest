@@ -1,0 +1,14 @@
+Package: test2017package
+Type: Package
+Title: This is a Test
+Version: 0.1.0
+Author: Sophie C Schmidt
+Maintainer: Sophie Schmdit <idhreneth@gmail.com>
+Description: This compendium contains code and data for the ... url ... , ...
+    um neue zeile anzufangen sollte an dieser stelle vorne 4 leerzeichen sein
+    doi-angabe immer gut für die version, mit der die publikation erstellt wurde
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Suggests: testthat
+RoxygenNote: 6.0.1

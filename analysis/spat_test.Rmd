@@ -1,0 +1,75 @@
+---
+title: "Hier probiere ich mit räumlichen Daten herum"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(sp)
+library(spatstat)
+library(rgdal)
+library(leaflet)
+library(raster)
+
+
+sites <- read.csv("../data/Sites_HarranPlain.csv", sep=",")
+coordinates(sites)<-~X+Y
+proj4string(sites) <-CRS("+init=epsg:4326")
+
+sites <- spTransform(sites, CRSobj = CRS("+init=epsg:32637"))#utm 37
+
+sites_ppp <- ppp(x = sites@coords[,1], 
+                y = sites@coords[,2],
+              window = owin(xrange=sites@bbox[1,], yrange=c(min(sites@coords[,2]), min(sites@coords[,2]+60000))))
+              # Windows definieren mit Bounding Box
+sites_ppp <- unique.ppp(sites_ppp) # removes duplicates
+```
+
+## Data
+
+I like to do some spatial stuff, so I got some test data, called test.
+Also, I got SRTM-data, downloaded on the 20th of July via get_data (see fig. \@ref(fig:plot-map).
+
+```{r plot-map, fig.cap="sites"}
+plot(sites_ppp)
+```
+
+## Analysis
+
+```{r nearest neighbors}
+sites_ppp_nn <- nndist(sites_ppp) # distance in m, because its transformed data
+str(sites_ppp_nn) 
+hist(sites_ppp_nn)
+dens_nn <- density(sites_ppp_nn)
+sites_ppp_kde<-density.ppp(sites_ppp, sigma=mean(sites_ppp_nn))
+plot(sites_ppp_kde)
+plot(dens_nn)
+```
+
+
+```{r dem-stuff}
+dem_harran <- readGDAL("./data/dem.tif")
+im_dem <- as.im(as.image.SpatialGridDataFrame(dem_harran))
+plot(dem_harran)
+
+sites_rhohat <- rhohat(object = sites_ppp, covariate = im_dem)
+plot(sites_rhohat, xlim=c(0,1000))
+
+rho_dem <- predict(sites_rhohat)
+plot(rho_dem)
+
+diff_rho <- sites_ppp_kde - rho_dem
+plot(diff_rho)
+
+set.seed(5)
+sites_rpoispp <-rpoispp(ex=sites_ppp)
+plot(sites_rpoispp)
+```
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
